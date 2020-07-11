@@ -1,0 +1,10 @@
+function updateSaveData() {
+    //Start of something new!
+    var path = require('path');
+    var exportdb = JSON.stringify(data, null, "\t");
+    var stream_1 = fs.createWriteStream(path.join(require('os').homedir(), "Google Drive", "tape_save.txt"));
+    stream_1.once('open', function () {
+        stream_1.write(exportdb);
+        stream_1.end();
+    });
+    //End of something new!

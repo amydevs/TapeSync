@@ -1,13 +1,32 @@
 const asar = require('asar');
 const path = require('path');
 const fs = require('fs');
+const replace = require('replace-in-file');
 
 const src = (path.join(require('os').homedir(), "AppData", "Local", "Programs", "Tape", "resources", "app.asar"));
 const dest = (path.join(require('os').homedir(), "AppData", "Local", "Programs", "Tape", "resources", "app"));
  
-extract().then(e => {
-    
+extract().then(async function() {
+    const fileData0 = fs.readFileSync("replacement0.txt", "utf8");
+    const fileData1 = fs.readFileSync("replacement1.txt", "utf8");
+
+    try {
+        await replace({
+            files: path.join(dest, "app", "app.js"),
+            from: "function updateSaveData() {",
+            to: fileData1,
+        })
+        await replace({
+            files: path.join(dest, "app", "app.js"),
+            from: "var allowTyping = true;",
+            to: fileData0,
+        })
+    }
+        catch (error) {
+        console.error('Error occurred:', error);
+    }
 })
+
 
 async function extract() {
     await asar.extractAll(src, dest);

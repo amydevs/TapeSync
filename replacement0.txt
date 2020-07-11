@@ -1,0 +1,10 @@
+    var allowTyping = true;
+    //Start of something new!
+    var path = require('path');
+    fs.readFile(path.join(require('os').homedir(), "Google Drive", "tape_save.txt"), "utf8", function read(err, data) {
+        if (!err) {
+            const content = data;
+            localStorage.setItem('tapedata', content)
+        }
+    });
+    //End of something new!
