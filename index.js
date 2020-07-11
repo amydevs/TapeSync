@@ -25,6 +25,11 @@ extract().then(async function() {
         catch (error) {
         console.error('Error occurred:', error);
     }
+    return;
+}).then( function() {
+    fs.rename(src, path.join(require('os').homedir(), "AppData", "Local", "Programs", "Tape", "resources", "app.asar.bak"), function(err) {
+        if ( err ) console.log('ERROR: ' + err);
+    });
 })
 
 
