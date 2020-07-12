@@ -18,21 +18,24 @@ extract().then(async function() {
             from: "var allowTyping = true;",
             to: replacement0,
         })
+        console.log('JS Modification Finished.');
     }
         catch (error) {
         console.error('JS modification error:', error);
     }
     return;
 }).then( function() {
-    fs.rename(src, path.join(require('os').homedir(), "AppData", "Local", "Programs", "Tape", "resources", "app.asar.bak"), function(err) {
-        if (error) console.error('Extraction Error: ', err);
+    var rename = path.join(require('os').homedir(), "AppData", "Local", "Programs", "Tape", "resources", "app.asar.bak")
+    fs.rename(src, rename, function(err) {
+        if (error) console.error('Backup rename error: ', err);
+        else console.log('Renamed original contents to backup file:' + rename);
     });
 })
 
 
 async function extract() {
     await asar.extractAll(src, dest);
-    console.log('done.');
+    console.log('Extraction Finished.');
     return;
 }
 
