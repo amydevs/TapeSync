@@ -7,19 +7,16 @@ const src = (path.join(require('os').homedir(), "AppData", "Local", "Programs", 
 const dest = (path.join(require('os').homedir(), "AppData", "Local", "Programs", "Tape", "resources", "app"));
  
 extract().then(async function() {
-    var fileData0 = fs.readFileSync("replacement0.txt", "utf8");
-    var fileData1 = fs.readFileSync("replacement1.txt", "utf8");
-
     try {
         await replace({
             files: path.join(dest, "app", "app.js"),
             from: "function updateSaveData() {",
-            to: fileData1,
+            to: replacement1,
         })
         await replace({
             files: path.join(dest, "app", "app.js"),
             from: "var allowTyping = true;",
-            to: fileData0,
+            to: replacement0,
         })
     }
         catch (error) {
@@ -38,3 +35,32 @@ async function extract() {
     console.log('done.');
     return;
 }
+
+const replacement0 = 
+'    var allowTyping = true;\r\n' +    
+'    //Start of something new!\r\n' +
+"    var path = require('path');\r\n" +
+`    fs.readFile(path.join(require('os').homedir(), "Google Drive", "tape_save.txt"), "utf8", function read(err, data) {\r\n` +
+'        if (!err) {\r\n' +
+'            const content = data;\r\n' +
+"            localStorage.setItem('tapedata', content)\r\n" +
+"            if(sessionStorage.getItem('tempCounter') == null){\r\n" +
+"                sessionStorage.setItem('tempCounter', 0)\r\n" +
+"                var remote = require('electron').remote;\r\n" +
+'                remote.getCurrentWindow().reload();\r\n' +
+'            }\r\n' +
+'        }\r\n' +
+'    });\r\n' +
+'    //End of something new!'
+
+const replacement1 = 
+'function updateSaveData() {\r\n' +
+    '    //Start of something new!\r\n' +
+    "    var path = require('path');\r\n" +
+    '    var exportdb = JSON.stringify(data, null, "\\t");\r\n' +
+    `    var stream_1 = fs.createWriteStream(path.join(require('os').homedir(), "Google Drive", "tape_save.txt"));\r\n` +
+    "    stream_1.once('open', function () {\r\n" +
+    '        stream_1.write(exportdb);\r\n' +
+    '        stream_1.end();\r\n' +
+    '    });\r\n' +
+    '    //End of something new!'
