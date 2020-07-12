@@ -5,6 +5,11 @@
         if (!err) {
             const content = data;
             localStorage.setItem('tapedata', content)
+            if(sessionStorage.getItem('tempCounter') == null){
+                sessionStorage.setItem('tempCounter', 0)
+                var remote = require('electron').remote;
+                remote.getCurrentWindow().reload();
+            }
         }
     });
     //End of something new!
