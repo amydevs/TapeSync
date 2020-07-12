@@ -20,14 +20,14 @@ extract().then(async function() {
         })
         console.log('JS Modification Finished.');
     }
-        catch (error) {
-        console.error('JS modification error:', error);
+        catch (err) {
+        console.error('JS modification error:', err);
     }
     return;
 }).then( function() {
     var rename = path.join(require('os').homedir(), "AppData", "Local", "Programs", "Tape", "resources", "app.asar.bak")
     fs.rename(src, rename, function(err) {
-        if (error) console.error('Backup rename error: ', err);
+        if (err) console.error('Backup rename error: ', err);
         else console.log('Renamed original contents to backup file:' + rename);
     });
 })
