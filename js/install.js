@@ -84,7 +84,7 @@ class INSTALL {
                 fs.rename(src, rename, function(err) {
                     if (err) console.error('Backup rename error: ', err);
                     else console.log('Renamed original contents to backup file: ' + rename);
-                    console.log('Done!')
+                    console.log('Done! It is now safe to close this window if it is still open.')
                 });
             })
             return;
