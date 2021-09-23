@@ -7,7 +7,6 @@ const path = require('path');
 const fs = require('fs');
 electron.app.on('ready', async function () {
     var win = BrowserWindow.getFocusedWindow()
-    win.webContents.openDevTools();
 
     // Set Sync Dir
     var dir = (await getLocalStorage(win))["sync_dir"] || await getDirectoryFromUI();
