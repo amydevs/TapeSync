@@ -10,9 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "asar": "^3.0.3",
-    "path": "^0.12.7",
-    "replace-in-file": "^6.1.0",
-    "rimraf": "^3.0.2"
+    "fs-extra": "^10.0.0"
   }
 }
