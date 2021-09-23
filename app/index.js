@@ -10,7 +10,8 @@ electron.app.on('ready', async function () {
     var win = BrowserWindow.getFocusedWindow()
     win.webContents.openDevTools();
 
-    var dir = (await getLocalStorage(win))["sync_dir"] || String(await dialog.showOpenDialog({title: "Select the folder for syncing to and from", properties: ['openDirectory'] }));
+    // Set Sync Dir
+    var dir = (await getLocalStorage(win))["sync_dir"] || await getDirectoryFromUI();
     var fullDir = undefined;
     switch (dir) {
         case undefined:
@@ -23,9 +24,15 @@ electron.app.on('ready', async function () {
             fullDir = path.join(dir, "tapesync_save.json");
             break;
     }
-
     
+    win.webContents.on('before-input-event', async (event, input) => {
+        if (input.control && input.key.toLowerCase() === 'r') {
+            dir = await getDirectoryFromUI();
+            event.preventDefault()
+        }
+    })
 
+    // Load Sync File if Exists
     if (fs.existsSync(fullDir)) {
         var value = fs.readFileSync(fullDir, "utf8"); 
         await setLocalStorage(win, "tapedata", value);
@@ -33,12 +40,18 @@ electron.app.on('ready', async function () {
         
     }
     
+    // Save Sync File
     win.on('close', function() {
         getLocalStorage(win).then( e => {
-            if (fs.existsSync(dir)) fs.writeFileSync(fullDir, e["tapedata"])
+            var data = e["tapedata"];
+            if (fs.existsSync(dir) && data != undefined && data != "undefined") fs.writeFileSync(fullDir, data)
         })
     })
 })
+
+async function getDirectoryFromUI() {
+    return String(await dialog.showOpenDialog({title: "Select the folder for syncing to and from", properties: ['openDirectory'] }))
+}
 
 async function setLocalStorage(win, key, value) {
     return await win.webContents.executeJavaScript(`window.localStorage.setItem('${key}', '${fixRawString(value)}');`);
