@@ -1,7 +1,7 @@
 # TapeSync
 A rough draft of a script that adds synchorization via Google Drive to [Aeriform Tape](https://www.aeriform.io/docs/tape) (I am in no way associated with the product btw, this is simply a mod). I'll probably add more sync folder options in the future. However in the mean time, feel free to modify the code for your own cloud synchronisation service. 
 
-# How to Install (No Compilation Needed! The Node installer is a bit broken atm when compiled, but you can still use it through npm.):
+# How to Install (No Compilation Needed! The Node installer is a bit broken atm when compiled with PKG, but you can still use it through just Node.):
 To install, simply move the `app` folder in the repository to `C:\Users\{your username}\AppData\Local\Programs\Tape\resources`
 ![image](https://user-images.githubusercontent.com/50583248/134498982-20f62778-f72a-4985-acec-fae5c0d1861e.png)
 
