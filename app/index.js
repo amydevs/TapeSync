@@ -9,8 +9,9 @@ const fs = require('fs');
 electron.app.on('ready', async function () {
     var win = BrowserWindow.getFocusedWindow()
     win.webContents.openDevTools();
-    
+
     var dir = (await getLocalStorage(win))["sync_dir"] || String(await dialog.showOpenDialog({title: "Select the folder for syncing to and from", properties: ['openDirectory'] }));
+    var fullDir = undefined;
     switch (dir) {
         case undefined:
         case "undefined":
@@ -19,18 +20,28 @@ electron.app.on('ready', async function () {
             break;
         default:
             await setLocalStorage(win, "sync_dir", dir);
+            fullDir = path.join(dir, "tapesync_save.json");
             break;
     }
 
-    win.on('close', async function() {
-        if (fs.existsSync(dir)) {
-            fs.writeFile(path.join(dir, "tapesync_save.json"), fixRawString((await getLocalStorage(win))["tapedata"]))
-        }
+    
+
+    if (fs.existsSync(fullDir)) {
+        var value = fs.readFileSync(fullDir, "utf8"); 
+        await setLocalStorage(win, "tapedata", value);
+        win.reload();
+        
+    }
+    
+    win.on('close', function() {
+        getLocalStorage(win).then( e => {
+            if (fs.existsSync(dir)) fs.writeFileSync(fullDir, e["tapedata"])
+        })
     })
 })
 
 async function setLocalStorage(win, key, value) {
-    return await win.webContents.executeJavaScript(`window.localStorage["${key}"] = "${fixRawString(value)}"`);
+    return await win.webContents.executeJavaScript(`window.localStorage.setItem('${key}', '${fixRawString(value)}');`);
 }
 
 async function getLocalStorage(win) {
@@ -41,4 +52,7 @@ function fixRawString(rawString) {
     return rawString.split("\\").join("\\\\");
 }
 
+function dialogPrint(win, message) {
+    dialog.showMessageBox(win, { type: 'info', message: message, buttons: ['Yes'] });
+}
 
