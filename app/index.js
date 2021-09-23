@@ -5,7 +5,6 @@ const {dialog, BrowserWindow} = electron;
 
 const path = require('path');
 const fs = require('fs');
-
 electron.app.on('ready', async function () {
     var win = BrowserWindow.getFocusedWindow()
     win.webContents.openDevTools();
@@ -50,7 +49,7 @@ electron.app.on('ready', async function () {
 })
 
 async function getDirectoryFromUI() {
-    return String(await dialog.showOpenDialog({title: "Select the folder for syncing to and from", properties: ['openDirectory'] }))
+    return String(await dialog.showOpenDialog({title: "Please select your folder for syncing (Google Drive, OneDrive, iCloud, etc.):", properties: ['openDirectory'] }))
 }
 
 async function setLocalStorage(win, key, value) {
