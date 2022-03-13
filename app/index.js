@@ -26,6 +26,7 @@ electron.app.on('ready', async function () {
     win.webContents.on('before-input-event', async (event, input) => {
         if (input.control && input.key.toLowerCase() === 'r') {
             dir = await getDirectoryFromUI();
+            await setLocalStorage(win, "sync_dir", dir);
             event.preventDefault()
         }
     })
