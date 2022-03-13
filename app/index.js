@@ -34,7 +34,7 @@ electron.app.on('ready', async function () {
     // Load Sync File if Exists
     if (fs.existsSync(fullDir)) {
         var value = fs.readFileSync(fullDir, "utf8"); 
-        await setLocalStorage(win, "tapedata", value);
+        await setLocalStorage(win, "tapedata", JSON.stringify(JSON.parse(value)));
         win.reload();
         
     }
@@ -43,7 +43,7 @@ electron.app.on('ready', async function () {
     win.on('close', function() {
         getLocalStorage(win).then( e => {
             var data = e["tapedata"];
-            if (fs.existsSync(dir) && data != undefined && data != "undefined") fs.writeFileSync(fullDir, data)
+            if (fs.existsSync(dir) && data != undefined && data != "undefined") fs.writeFileSync(fullDir, JSON.stringify(JSON.parse(data), null, "\t"))
         })
     })
 })
@@ -67,4 +67,3 @@ function fixRawString(rawString) {
 function dialogPrint(win, message) {
     dialog.showMessageBox(win, { type: 'info', message: message, buttons: ['Yes'] });
 }
-
