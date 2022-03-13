@@ -19,7 +19,7 @@ electron.app.on('ready', async function () {
             break;
         default:
             await setLocalStorage(win, "sync_dir", dir);
-            fullDir = path.join(dir, "tapesync_save.json");
+            fullDir = path.join(dir, "tapesync_save.txt");
             break;
     }
     
